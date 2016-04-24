@@ -6,7 +6,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import sample.model.FileItem;
 
 import javax.swing.filechooser.FileSystemView;
@@ -15,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable{
@@ -46,6 +49,27 @@ public class MainController implements Initializable{
     Button rightSideRoot;
     @FXML
     Button rightSideUpper;
+    @FXML
+    Button buttonCopy;
+    @FXML
+    Button buttonMove;
+    @FXML
+    Button buttonDelete;
+
+    @FXML
+    MenuItem changeLanguageEnglish;
+    @FXML
+    MenuItem changeLanguagePolish;
+    @FXML
+    MenuItem menuFile;
+    @FXML
+    MenuItem menuHelp;
+    @FXML
+    MenuItem menuItemClose;
+    @FXML
+    MenuItem menuItemSwitchLanguage;
+    @FXML
+    MenuItem menuItemAbout;
 
 
     private static String osType;
@@ -102,6 +126,33 @@ public class MainController implements Initializable{
             if (parentFile != null)
                 initializeTable(rightTable, parentFile.getPath());
         });
+        changeLanguageEnglish.setOnAction(e -> changeLanguage("en"));
+        changeLanguagePolish.setOnAction(e -> changeLanguage("pl"));
+        menuItemClose.setOnAction(e -> {
+            Stage stage = (Stage) leftTable.getScene().getWindow();
+            stage.close();
+        });
+    }
+
+    private void changeLanguage(String locale) {
+        Locale.setDefault(new Locale(locale));
+        ResourceBundle bundle = ResourceBundle.getBundle("strings", Locale.getDefault());
+        leftColumnName.setText(bundle.getString("table.name"));
+        leftColumnSize.setText(bundle.getString("table.size"));
+        leftColumnTime.setText(bundle.getString("table.time"));
+        rightColumnName.setText(bundle.getString("table.name"));
+        rightColumnSize.setText(bundle.getString("table.size"));
+        rightColumnTime.setText(bundle.getString("table.time"));
+        menuFile.setText(bundle.getString("menu.file"));
+        menuHelp.setText(bundle.getString("menu.help"));
+        menuItemClose.setText(bundle.getString("menu.file.close"));
+        menuItemAbout.setText(bundle.getString("menu.item.about"));
+        menuItemSwitchLanguage.setText(bundle.getString("menu.file.language"));
+        changeLanguageEnglish.setText(bundle.getString("menu.file.language.english"));
+        changeLanguagePolish.setText(bundle.getString("menu.file.language.polish"));
+        buttonCopy.setText(bundle.getString("button.copy"));
+        buttonMove.setText(bundle.getString("button.move"));
+        buttonDelete.setText(bundle.getString("button.delete"));
     }
 
     private void initializeColumns() {
