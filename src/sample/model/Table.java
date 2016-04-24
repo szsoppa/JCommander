@@ -1,6 +1,7 @@
 package sample.model;
 
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -9,13 +10,13 @@ import javafx.beans.property.SimpleStringProperty;
 public class Table {
 
     private SimpleStringProperty rName;
-    private SimpleIntegerProperty rSize;
-    private SimpleStringProperty rDate;
+    private SimpleStringProperty rSize;
+    private SimpleStringProperty rTime;
 
-    public Table (String rName, int rSize, String rDate) {
+    public Table (String rName, String rSize, String rDate) {
         this.rName = new SimpleStringProperty(rName);
-        this.rSize = new SimpleIntegerProperty(rSize);
-        this.rDate = new SimpleStringProperty(rDate);
+        this.rSize = new SimpleStringProperty(rSize);
+        this.rTime = new SimpleStringProperty(rDate);
     }
 
     public String getrName() {
@@ -30,27 +31,28 @@ public class Table {
         this.rName.set(rName);
     }
 
-    public int getrSize() {
+    public String getrSize() {
         return rSize.get();
     }
 
-    public SimpleIntegerProperty rSizeProperty() {
+    public SimpleStringProperty rSizeProperty() {
         return rSize;
     }
 
-    public void setrSize(int rSize) {
+    public void setrSize(String rSize) {
         this.rSize.set(rSize);
     }
 
-    public String getrDate() {
-        return rDate.get();
+
+    public String getrTime() {
+        return rTime.get();
     }
 
-    public SimpleStringProperty rDateProperty() {
-        return rDate;
+    public SimpleStringProperty rTimeProperty() {
+        return rTime;
     }
 
-    public void setrDate(String rDate) {
-        this.rDate.set(rDate);
+    public void setrTime(String rTime) {
+        this.rTime.set(rTime);
     }
 }
