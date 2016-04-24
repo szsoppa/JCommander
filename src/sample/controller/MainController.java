@@ -1,12 +1,16 @@
 package sample.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import sample.model.Table;
 
-public class MainController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MainController implements Initializable{
 
     @FXML
     TableView<Table> leftTable;
@@ -27,11 +31,8 @@ public class MainController {
     @FXML
     TableColumn<Table, String> rightColumnTime;
 
-    public MainController() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
 
-    }
-
-    public void showSomething() {
-        System.out.println("Something");
     }
 }

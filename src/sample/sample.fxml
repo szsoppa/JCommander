@@ -48,7 +48,7 @@
       </HBox>
       <HBox alignment="CENTER" spacing="10.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#showSomething" text="%button.copy" HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" text="%button.copy" HBox.hgrow="ALWAYS" />
             <Button mnemonicParsing="false" text="%button.move" HBox.hgrow="ALWAYS" />
             <Button mnemonicParsing="false" text="%button.delete" HBox.hgrow="ALWAYS" />
          </children>
