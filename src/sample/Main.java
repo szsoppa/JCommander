@@ -6,13 +6,19 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        Locale locale = new Locale("pl");
+        ResourceBundle bundle = ResourceBundle.getBundle("strings", locale);
+
+        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"), bundle);
+        primaryStage.setTitle("Commander");
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 
