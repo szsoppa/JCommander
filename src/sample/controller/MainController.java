@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import sample.dialog.ProgressDialog;
@@ -74,6 +75,11 @@ public class MainController implements Initializable{
     @FXML
     MenuItem menuItemAbout;
 
+    @FXML
+    TextField leftPathInput;
+    @FXML
+    TextField rightPathInput;
+
 
     private static String osType;
 
@@ -92,14 +98,14 @@ public class MainController implements Initializable{
         leftSideRoot.setOnMouseClicked(event -> initializeTable(leftTable, null));
         rightSideRoot.setOnMouseClicked(event -> initializeTable(rightTable, null));
         leftSideUpper.setOnMouseClicked(event -> {
-            File file = new File(leftTable.getItems().get(0).getrPath());
-            File parentFile = file.getParentFile().getParentFile();
+            File file = new File(leftPathInput.getText());
+            File parentFile = file.getParentFile();
             if (parentFile != null)
                 initializeTable(leftTable, parentFile.getPath());
         });
         rightSideUpper.setOnMouseClicked(event -> {
-            File file = new File(rightTable.getItems().get(0).getrPath());
-            File parentFile = file.getParentFile().getParentFile();
+            File file = new File(rightPathInput.getText());
+            File parentFile = file.getParentFile();
             if (parentFile != null)
                 initializeTable(rightTable, parentFile.getPath());
         });
@@ -190,6 +196,11 @@ public class MainController implements Initializable{
         SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         if (path == null)
             path = getRootDirectory();
+        if (table.getId().contains("left"))
+            setPathInput(leftPathInput, path);
+        else
+            setPathInput(rightPathInput, path);
+
         File directory = new File(path);
         File[] fList = directory.listFiles();
         for (File file: fList) {
@@ -205,6 +216,10 @@ public class MainController implements Initializable{
             data.add(row);
         }
         table.setItems(data);
+    }
+
+    private void setPathInput(TextField leftPathInput, String path) {
+        leftPathInput.setText(path);
     }
 
     private String getRootDirectory() {
