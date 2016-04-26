@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.ProgressDialogController">
+   <children>
+      <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.0" VBox.vgrow="ALWAYS">
+         <VBox.margin>
+            <Insets left="5.0" right="5.0" top="5.0" />
+         </VBox.margin>
+      </ProgressBar>
+      <Button fx:id="cancelButton" mnemonicParsing="false" text="%button.cancel.file.operation">
+         <VBox.margin>
+            <Insets bottom="5.0" />
+         </VBox.margin>
+      </Button>
+   </children>
+
+</VBox>

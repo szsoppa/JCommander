@@ -14,6 +14,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Locale locale = new Locale("pl");
+        Locale.setDefault(locale);
         ResourceBundle bundle = ResourceBundle.getBundle("strings", locale);
 
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"), bundle);

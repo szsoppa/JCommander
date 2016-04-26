@@ -9,6 +9,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import sample.dialog.ProgressDialog;
+import sample.file_operation.CopyOperation;
+import sample.file_operation.DeleteOperation;
 import sample.model.FileItem;
 
 import javax.swing.filechooser.FileSystemView;
@@ -84,34 +87,8 @@ public class MainController implements Initializable{
     }
 
     private void initializeEvents() {
-        leftTable.setOnMousePressed(event -> {
-            if(event.getClickCount() == 2) {
-                FileItem fileItem = leftTable.getSelectionModel().getSelectedItem();
-                if (fileItem.isDirectory())
-                    initializeTable(leftTable, fileItem.getrPath());
-                else {
-                    try {
-                        Desktop.getDesktop().open(new File(fileItem.getrPath()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-        rightTable.setOnMousePressed(event -> {
-            if(event.getClickCount() == 2) {
-                FileItem fileItem = rightTable.getSelectionModel().getSelectedItem();
-                if (fileItem.isDirectory())
-                    initializeTable(rightTable, fileItem.getrPath());
-                else {
-                    try {
-                        Desktop.getDesktop().open(new File(fileItem.getrPath()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
+        initializeOpenFileEvent(leftTable);
+        initializeOpenFileEvent(rightTable);
         leftSideRoot.setOnMouseClicked(event -> initializeTable(leftTable, null));
         rightSideRoot.setOnMouseClicked(event -> initializeTable(rightTable, null));
         leftSideUpper.setOnMouseClicked(event -> {
@@ -131,6 +108,33 @@ public class MainController implements Initializable{
         menuItemClose.setOnAction(e -> {
             Stage stage = (Stage) leftTable.getScene().getWindow();
             stage.close();
+        });
+        buttonDelete.setOnMouseClicked(e -> {
+            ProgressDialog progressDialog = null;
+            try {
+                progressDialog = new ProgressDialog();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            if (progressDialog != null) {
+                FileItem fileItem = leftTable.getSelectionModel().getSelectedItem();
+                progressDialog.show();
+                progressDialog.runOperation(new DeleteOperation(fileItem.getrPath()));
+            }
+        });
+        buttonCopy.setOnMouseClicked(e -> {
+            ProgressDialog progressDialog = null;
+            try {
+                progressDialog = new ProgressDialog();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            if (progressDialog != null) {
+                FileItem fileItem = leftTable.getSelectionModel().getSelectedItem();
+                String copyTo = (new File(rightTable.getItems().get(0).getrPath())).getParentFile().getPath();
+                progressDialog.show();
+                progressDialog.runOperation(new CopyOperation(fileItem.getrPath(), copyTo));
+            }
         });
     }
 
@@ -162,6 +166,23 @@ public class MainController implements Initializable{
         rightColumnName.setCellValueFactory(new PropertyValueFactory<FileItem, String>("rName"));
         rightColumnSize.setCellValueFactory(new PropertyValueFactory<FileItem, String>("rSize"));
         rightColumnTime.setCellValueFactory(new PropertyValueFactory<FileItem, String>("rTime"));
+    }
+
+    public void initializeOpenFileEvent(TableView<FileItem> table) {
+        table.setOnMousePressed(event -> {
+            if(event.getClickCount() == 2) {
+                FileItem fileItem = table.getSelectionModel().getSelectedItem();
+                if (fileItem.isDirectory())
+                    initializeTable(table, fileItem.getrPath());
+                else {
+                    try {
+                        Desktop.getDesktop().open(new File(fileItem.getrPath()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     private void initializeTable(TableView<FileItem> table, String path) {
