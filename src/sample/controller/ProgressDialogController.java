@@ -23,13 +23,10 @@ public class ProgressDialogController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        progressBar.setProgress(1.0);
-    }
-
-    public ProgressDialogController() {
     }
 
     public void startOperation(Operation operation) {
+        operation.progressProperty().bind(progressBar.progressProperty());
         new Thread(operation).start();
     }
 }

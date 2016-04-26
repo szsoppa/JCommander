@@ -24,8 +24,8 @@ public class DeleteOperation extends Operation{
                 @Override
                 public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
                     if (e == null) {
-                        Files.delete(dir);
                         progress.set(getProgress() + Files.size(dir));
+                        Files.delete(dir);
                         return FileVisitResult.CONTINUE;
                     } else {
                         System.out.println("Exception while iterating directory.");

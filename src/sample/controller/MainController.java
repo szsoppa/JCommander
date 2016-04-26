@@ -13,10 +13,12 @@ import javafx.stage.Stage;
 import sample.dialog.ProgressDialog;
 import sample.file_operation.CopyOperation;
 import sample.file_operation.DeleteOperation;
+import sample.file_operation.MoveOperation;
 import sample.model.FileItem;
 
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
+import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -137,10 +139,32 @@ public class MainController implements Initializable{
             }
             if (progressDialog != null) {
                 FileItem fileItem = leftTable.getSelectionModel().getSelectedItem();
-                String copyTo = (new File(rightTable.getItems().get(0).getrPath())).getParentFile().getPath();
+                File dir = new File(rightPathInput.getText() + "/" + fileItem.getrName());
+                dir.mkdir();
                 progressDialog.show();
-                progressDialog.runOperation(new CopyOperation(fileItem.getrPath(), copyTo));
+                progressDialog.runOperation(new CopyOperation(fileItem.getrPath(), dir.getAbsolutePath()));
             }
+        });
+        buttonMove.setOnMouseClicked(e -> {
+            ProgressDialog progressDialog = null;
+            try {
+                progressDialog = new ProgressDialog();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            if (progressDialog != null) {
+                FileItem fileItem = leftTable.getSelectionModel().getSelectedItem();
+                File dir = new File(rightPathInput.getText() + "/" + fileItem.getrName());
+                dir.mkdir();
+                progressDialog.show();
+                progressDialog.runOperation(new MoveOperation(fileItem.getrPath(), dir.getAbsolutePath()));
+            }
+        });
+        leftPathInput.setOnKeyPressed(e -> {
+            if(e.getCode().toString().equals("ENTER")) initializeTable(leftTable, leftPathInput.getText());
+        });
+        rightPathInput.setOnKeyPressed(e -> {
+            if(e.getCode().toString().equals("ENTER")) initializeTable(rightTable, rightPathInput.getText());
         });
     }
 
@@ -224,7 +248,7 @@ public class MainController implements Initializable{
 
     private String getRootDirectory() {
         if (isWindows())
-            return "C:\\\\";
+            return "C:\\";
         else
             return FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath();
     }

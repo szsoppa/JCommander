@@ -6,14 +6,14 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.EnumSet;
 
 /**
- * Created by Szymon on 24.04.2016.
+ * Created by Szymon on 26.04.2016.
  */
-public class CopyOperation extends Operation {
+public class MoveOperation extends Operation {
 
     private String pathFrom;
     private String pathTo;
 
-    public CopyOperation(String pathFrom, String pathTo) {
+    public MoveOperation(String pathFrom, String pathTo) {
         super();
         this.pathFrom = pathFrom;
         this.pathTo = pathTo;
@@ -39,8 +39,14 @@ public class CopyOperation extends Operation {
                         }
                         @Override
                         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                            Files.copy(file, targetDir.resolve(sourceDir.relativize(file)));
-                            setProgress(1.0);
+                            Files.move(file, targetDir.resolve(sourceDir.relativize(file)));
+                            return FileVisitResult.CONTINUE;
+                        }
+
+                        @Override
+                        public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                            System.out.println(dir.toString());
+                            Files.delete(dir);
                             return FileVisitResult.CONTINUE;
                         }
                     });

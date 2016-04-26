@@ -1,25 +1,26 @@
 package sample.file_operation;
 
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 
 /**
  * Created by Szymon on 25.04.2016.
  */
 public abstract class Operation implements Runnable {
-    protected SimpleLongProperty progress;
+    protected DoubleProperty progress;
 
     public Operation() {
-        this.progress = new SimpleLongProperty(0);
+        this.progress = new SimpleDoubleProperty(0.0);
     }
 
-    public long getProgress() {
+    public double getProgress() {
         return progress.get();
     }
 
-    public SimpleLongProperty progressProperty() {
+    public DoubleProperty progressProperty() {
         return progress;
     }
 
+    public void setProgress(double progress) {
+        this.progress.set(progress);
+    }
 }
