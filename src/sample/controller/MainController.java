@@ -25,6 +25,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -86,6 +87,11 @@ public class MainController implements Initializable{
     @FXML
     TextField rightPathInput;
 
+    @FXML
+    ComboBox leftComboBox;
+    @FXML
+    ComboBox rightComboBox;
+
 
     private static String osType;
 
@@ -95,6 +101,8 @@ public class MainController implements Initializable{
         initializeColumns();
         initializeTable(leftTable, null);
         initializeTable(rightTable, null);
+        initializeRoot(leftComboBox, leftTable, leftPathInput);
+        initializeRoot(rightComboBox, rightTable, rightPathInput);
         initializeEvents();
     }
 
@@ -202,6 +210,19 @@ public class MainController implements Initializable{
         rightColumnName.setCellValueFactory(new PropertyValueFactory<FileItem, String>("rName"));
         rightColumnSize.setCellValueFactory(new PropertyValueFactory<FileItem, String>("rSize"));
         rightColumnTime.setCellValueFactory(new PropertyValueFactory<FileItem, String>("rTime"));
+    }
+
+    private void initializeRoot(ComboBox comboBox, TableView tableView, TextField textField) {
+        ObservableList<String> rootsList = FXCollections.observableArrayList();
+        Arrays.stream(File.listRoots()).forEach(file -> rootsList.add(file.toString()));
+        comboBox.setItems(rootsList);
+        comboBox.setValue(rootsList.get(0));
+
+        comboBox.setOnAction(event -> {
+            String root = comboBox.getValue().toString();
+            textField.setText(root);
+            initializeTable(tableView, root);
+        });
     }
 
     public void initializeOpenFileEvent(TableView<FileItem> table) {
