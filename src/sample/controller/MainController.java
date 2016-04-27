@@ -28,10 +28,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class MainController implements Initializable{
 
@@ -135,20 +132,23 @@ public class MainController implements Initializable{
             stage.close();
         });
         buttonDelete.setOnMouseClicked(e -> {
-            ProgressDialog progressDialog = null;
-            try {
-                progressDialog = new ProgressDialog();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            if (progressDialog != null) {
-                FileItem fileItem = activeTable.getSelectionModel().getSelectedItem();
-                progressDialog.show();
-                progressDialog.dialogActiveProperty().addListener(e2 -> {
-                    initializeTable(leftTable, leftPathInput.getText());
-                    initializeTable(rightTable, rightPathInput.getText());
-                });
-                progressDialog.runOperation(new DeleteOperation(fileItem.getrPath()));
+            FileItem file = activeTable.getSelectionModel().getSelectedItem();
+            if (confirmDeleteDialog(new File(file.getrPath()))) {
+                ProgressDialog progressDialog = null;
+                try {
+                    progressDialog = new ProgressDialog();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                if (progressDialog != null) {
+                    FileItem fileItem = activeTable.getSelectionModel().getSelectedItem();
+                    progressDialog.show();
+                    progressDialog.dialogActiveProperty().addListener(e2 -> {
+                        initializeTable(leftTable, leftPathInput.getText());
+                        initializeTable(rightTable, rightPathInput.getText());
+                    });
+                    progressDialog.runOperation(new DeleteOperation(fileItem.getrPath()));
+                }
             }
         });
         buttonCopy.setOnMouseClicked(e -> {
@@ -336,5 +336,30 @@ public class MainController implements Initializable{
                 } else return 1;
             }
         });
+    }
+
+    private boolean confirmDeleteDialog(File file) {
+        ResourceBundle bundle = ResourceBundle.getBundle("strings", Locale.getDefault());
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        ButtonType buttonAccept = new ButtonType(bundle.getString("dialog.confirm.button.accept"));
+        ButtonType buttonCancel = new ButtonType(bundle.getString("dialog.confirm.button.cancel"));
+
+        alert.getButtonTypes().setAll(buttonAccept, buttonCancel);
+        if (file.isDirectory()) {
+            alert.setTitle(bundle.getString("dialog.confirm.directory.title"));
+            alert.setHeaderText(bundle.getString("dialog.confirm.directory.info"));
+            alert.setContentText(bundle.getString("dialog.confirm.directory.text"));
+        }
+        else {
+            alert.setTitle(bundle.getString("dialog.confirm.file.title"));
+            alert.setHeaderText(bundle.getString("dialog.confirm.file.info"));
+            alert.setContentText(bundle.getString("dialog.confirm.file.text"));
+        }
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            return true;
+        } else {
+            return false;
+        }
     }
 }
