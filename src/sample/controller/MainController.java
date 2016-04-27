@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Locale;
@@ -215,6 +216,8 @@ public class MainController implements Initializable{
         buttonCopy.setText(bundle.getString("button.copy"));
         buttonMove.setText(bundle.getString("button.move"));
         buttonDelete.setText(bundle.getString("button.delete"));
+        initializeTable(leftTable, leftPathInput.getText());
+        initializeTable(rightTable, rightPathInput.getText());
     }
 
     private void initializeColumns() {
@@ -258,7 +261,8 @@ public class MainController implements Initializable{
 
     private void initializeTable(TableView<FileItem> table, String path) {
         ObservableList<FileItem> data = FXCollections.observableArrayList();
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        DateFormat df = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
+        DateFormat tf = DateFormat.getTimeInstance(DateFormat.DEFAULT, Locale.getDefault());
         if (path == null)
             path = getRootDirectory();
         if (table.getId().contains("left"))
@@ -273,9 +277,11 @@ public class MainController implements Initializable{
             if (file.isHidden())
                 continue;
             else if (file.isFile())
-                row = new FileItem(file.getName(), Long.toString(file.length()), dateFormatter.format(file.lastModified()), file.getAbsolutePath(), false);
+                row = new FileItem(file.getName(), Long.toString(file.length()), df.format(file.lastModified()) + " " +
+                        tf.format(file.lastModified()), file.getAbsolutePath(), false);
             else if (file.isDirectory())
-                row = new FileItem(file.getName(), "<DIR>", dateFormatter.format(file.lastModified()), file.getAbsolutePath(), true);
+                row = new FileItem(file.getName(), "<DIR>", df.format(file.lastModified()) + " " +
+                        tf.format(file.lastModified()), file.getAbsolutePath(), true);
             else
                 continue;
             data.add(row);
