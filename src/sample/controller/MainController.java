@@ -23,6 +23,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
@@ -251,8 +252,10 @@ public class MainController implements Initializable{
         table.setOnMousePressed(event -> {
             if(event.getClickCount() == 2) {
                 FileItem fileItem = table.getSelectionModel().getSelectedItem();
-                if (fileItem.isDirectory())
+                if (fileItem.isDirectory()){
+                    System.out.println(fileItem.getrPath());
                     initializeTable(table, fileItem.getrPath());
+                }
                 else {
                     try {
                         Desktop.getDesktop().open(new File(fileItem.getrPath()));
@@ -279,16 +282,20 @@ public class MainController implements Initializable{
         File[] fList = directory.listFiles();
         for (File file: fList) {
             FileItem row = null;
-            if (file.isHidden())
-                continue;
-            else if (file.isFile())
-                row = new FileItem(file.getName(), Long.toString(file.length()), df.format(file.lastModified()) + " " +
-                        tf.format(file.lastModified()), file.getAbsolutePath(), false);
-            else if (file.isDirectory())
-                row = new FileItem(file.getName(), "<DIR>", df.format(file.lastModified()) + " " +
-                        tf.format(file.lastModified()), file.getAbsolutePath(), true);
-            else
-                continue;
+            try {
+                if (!Files.isReadable(file.toPath()) || Files.isSymbolicLink(file.toPath()) || Files.isHidden(file.toPath()))
+                    continue;
+                else if (file.isFile())
+                    row = new FileItem(file.getName(), Long.toString(file.length()), df.format(file.lastModified()) + " " +
+                            tf.format(file.lastModified()), file.getAbsolutePath(), false);
+                else if (file.isDirectory())
+                    row = new FileItem(file.getName(), "<DIR>", df.format(file.lastModified()) + " " +
+                            tf.format(file.lastModified()), file.getAbsolutePath(), true);
+                else
+                    continue;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             data.add(row);
         }
         table.setItems(data);
