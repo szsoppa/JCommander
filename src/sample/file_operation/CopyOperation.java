@@ -29,7 +29,9 @@ public class CopyOperation extends Operation {
                     new SimpleFileVisitor<Path>() {
                         @Override
                         public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                            if (getOperationClosed()) return FileVisitResult.TERMINATE;
+                            if (getOperationClosed()) {
+                                return FileVisitResult.TERMINATE;
+                            }
                             Path target = targetDir.resolve(sourceDir.relativize(dir));
                             try {
                                 Files.copy(dir, target);
@@ -42,7 +44,9 @@ public class CopyOperation extends Operation {
 
                         @Override
                         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                            if (getOperationClosed()) return FileVisitResult.TERMINATE;
+                            if (getOperationClosed()) {
+                                return FileVisitResult.TERMINATE;
+                            }
                             Files.copy(file, targetDir.resolve(sourceDir.relativize(file)));
                             incrementProgress((new File(file.toString())).length());
                             return FileVisitResult.CONTINUE;

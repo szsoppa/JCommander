@@ -55,8 +55,8 @@ public class ProgressDialog {
     public void runOperation(Operation operation) {
         progressDialogController.taskEndedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                this.close();
                 dialogActive.set(false);
+                this.close();
             }
         });
         progressDialogController.startOperation(operation);

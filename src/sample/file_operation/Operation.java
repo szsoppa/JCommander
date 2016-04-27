@@ -13,7 +13,7 @@ public abstract class Operation {
 
     public Operation() {
         this.progress = new SimpleLongProperty(0);
-        this.operationClosed = new SimpleBooleanProperty(false);
+//        this.operationClosed = new SimpleBooleanProperty(false);
     }
 
     public abstract void execute() throws IOException;
@@ -35,6 +35,7 @@ public abstract class Operation {
     public abstract String getWorkingFilePath ();
 
     public boolean getOperationClosed() {
+        System.out.println(operationClosed.get());
         return operationClosed.get();
     }
 
@@ -44,5 +45,10 @@ public abstract class Operation {
 
     public void setOperationClosed(boolean operationClosed) {
         this.operationClosed.set(operationClosed);
+    }
+
+    public void setOperationClosed(BooleanProperty operationClosed) {
+        this.operationClosed = operationClosed;
+        System.out.println(operationClosed.get());
     }
 }
