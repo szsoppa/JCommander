@@ -77,6 +77,9 @@
                </columnResizePolicy>
             </TableView>
             <TableView fx:id="rightTable" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                <placeholder>
+                    <Label text="%table.nocontent"/>
+                </placeholder>
               <columns>
                 <TableColumn fx:id="rightColumnName" prefWidth="75.0" text="%table.name" />
                   <TableColumn fx:id="rightColumnSize" prefWidth="75.0" text="%table.size" />

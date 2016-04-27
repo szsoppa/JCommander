@@ -109,8 +109,8 @@ public class MainController implements Initializable{
     private void initializeEvents() {
         initializeOpenFileEvent(leftTable);
         initializeOpenFileEvent(rightTable);
-        leftSideRoot.setOnMouseClicked(event -> initializeTable(leftTable, null));
-        rightSideRoot.setOnMouseClicked(event -> initializeTable(rightTable, null));
+        leftSideRoot.setOnMouseClicked(event -> initializeTable(leftTable, leftComboBox.getValue().toString()));
+        rightSideRoot.setOnMouseClicked(event -> initializeTable(rightTable, rightComboBox.getValue().toString()));
         leftSideUpper.setOnMouseClicked(event -> {
             File file = new File(leftPathInput.getText());
             File parentFile = file.getParentFile();
