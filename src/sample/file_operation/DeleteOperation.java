@@ -17,7 +17,7 @@ public class DeleteOperation extends Operation{
     }
 
     @Override
-    public void run() {
+    public void execute() {
         Path dirToDel = Paths.get(path);
         try {
             Files.walkFileTree(dirToDel, new SimpleFileVisitor<Path>() {

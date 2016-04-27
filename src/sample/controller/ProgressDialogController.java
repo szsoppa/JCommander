@@ -1,5 +1,6 @@
 package sample.controller;
 
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -26,7 +27,17 @@ public class ProgressDialogController implements Initializable {
     }
 
     public void startOperation(Operation operation) {
+        Task task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                operation.progressProperty().addListener((observable, oldValue, newValue) -> {
+                    updateProgress(operation.getProgress(), 1.0);
+                });
+                operation.execute();
+                return null;
+            }
+        };
         operation.progressProperty().bind(progressBar.progressProperty());
-        new Thread(operation).start();
+        new Thread(task).start();
     }
 }

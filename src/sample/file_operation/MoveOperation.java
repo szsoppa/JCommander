@@ -20,7 +20,7 @@ public class MoveOperation extends Operation {
     }
 
     @Override
-    public void run() {
+    public void execute() {
         final Path sourceDir = Paths.get(pathFrom);
         final Path targetDir = Paths.get(pathTo);
         try {

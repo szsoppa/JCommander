@@ -22,6 +22,8 @@ import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -61,6 +63,8 @@ public class MainController implements Initializable{
     Button buttonMove;
     @FXML
     Button buttonDelete;
+    @FXML
+    Button buttonRefresh;
 
     @FXML
     MenuItem changeLanguageEnglish;
@@ -139,10 +143,9 @@ public class MainController implements Initializable{
             }
             if (progressDialog != null) {
                 FileItem fileItem = leftTable.getSelectionModel().getSelectedItem();
-                File dir = new File(rightPathInput.getText() + "/" + fileItem.getrName());
-                dir.mkdir();
+                Path targetPath = Paths.get(rightPathInput.getText() + "/" + fileItem.getrName());
                 progressDialog.show();
-                progressDialog.runOperation(new CopyOperation(fileItem.getrPath(), dir.getAbsolutePath()));
+                progressDialog.runOperation(new CopyOperation(fileItem.getrPath(), targetPath.toString()));
             }
         });
         buttonMove.setOnMouseClicked(e -> {
@@ -154,11 +157,14 @@ public class MainController implements Initializable{
             }
             if (progressDialog != null) {
                 FileItem fileItem = leftTable.getSelectionModel().getSelectedItem();
-                File dir = new File(rightPathInput.getText() + "/" + fileItem.getrName());
-                dir.mkdir();
+                Path targetPath = Paths.get(rightPathInput.getText() + "/" + fileItem.getrName());
                 progressDialog.show();
-                progressDialog.runOperation(new MoveOperation(fileItem.getrPath(), dir.getAbsolutePath()));
+                progressDialog.runOperation(new MoveOperation(fileItem.getrPath(), targetPath.toString()));
             }
+        });
+        buttonRefresh.setOnMouseClicked(e -> {
+            initializeTable(leftTable, leftPathInput.getText());
+            initializeTable(rightTable, rightPathInput.getText());
         });
         leftPathInput.setOnKeyPressed(e -> {
             if(e.getCode().toString().equals("ENTER")) initializeTable(leftTable, leftPathInput.getText());

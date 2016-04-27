@@ -74,7 +74,7 @@
             <TableView fx:id="rightTable" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
               <columns>
                 <TableColumn fx:id="rightColumnName" prefWidth="75.0" text="%table.name" />
-                  <TableColumn fx:id="rightColumnSize" prefWidth="75.0" text="%table.name" />
+                  <TableColumn fx:id="rightColumnSize" prefWidth="75.0" text="%table.size" />
                   <TableColumn fx:id="rightColumnTime" prefWidth="75.0" text="%table.time" />
               </columns>
                <columnResizePolicy>
@@ -85,6 +85,7 @@
       </HBox>
       <HBox alignment="CENTER" spacing="10.0">
          <children>
+            <Button fx:id="buttonRefresh" alignment="TOP_LEFT" layoutX="230.0" layoutY="15.0" mnemonicParsing="false" text="%button.refresh" />
             <Button fx:id="buttonCopy" mnemonicParsing="false" text="%button.copy" HBox.hgrow="ALWAYS" />
             <Button fx:id="buttonMove" mnemonicParsing="false" text="%button.move" HBox.hgrow="ALWAYS" />
             <Button fx:id="buttonDelete" mnemonicParsing="false" text="%button.delete" HBox.hgrow="ALWAYS" />

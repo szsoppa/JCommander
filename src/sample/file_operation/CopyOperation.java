@@ -1,5 +1,6 @@
 package sample.file_operation;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -20,7 +21,7 @@ public class CopyOperation extends Operation {
     }
 
     @Override
-    public void run() {
+    public void execute() throws IOException {
         final Path sourceDir = Paths.get(pathFrom);
         final Path targetDir = Paths.get(pathTo);
         try {
@@ -37,6 +38,7 @@ public class CopyOperation extends Operation {
                             }
                             return FileVisitResult.CONTINUE;
                         }
+
                         @Override
                         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                             Files.copy(file, targetDir.resolve(sourceDir.relativize(file)));
