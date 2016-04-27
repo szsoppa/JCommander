@@ -7,7 +7,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 /**
  * Created by Szymon on 24.04.2016.
  */
-public class DeleteOperation extends Operation{
+public class DeleteOperation extends Operation {
 
     private String path;
 
@@ -22,20 +22,19 @@ public class DeleteOperation extends Operation{
         try {
             Files.walkFileTree(dirToDel, new SimpleFileVisitor<Path>() {
                 @Override
-                public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
-                    if (e == null) {
-                        progress.set(getProgress() + Files.size(dir));
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    Files.delete(file);
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                    if (exc == null) {
                         Files.delete(dir);
                         return FileVisitResult.CONTINUE;
                     } else {
-                        System.out.println("Exception while iterating directory.");
-                        throw e;
+                        throw exc;
                     }
-                }
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException{
-                    Files.delete(file);
-                    return FileVisitResult.CONTINUE;
                 }
             });
         } catch (IOException e) {
