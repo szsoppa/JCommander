@@ -24,6 +24,7 @@ public class DeleteOperation extends Operation {
             Files.walkFileTree(dirToDel, new SimpleFileVisitor<Path>() {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    if (getOperationClosed()) return FileVisitResult.TERMINATE;
                     long fileSize = (new File(file.toString())).length();
                     Files.delete(file);
                     incrementProgress(fileSize);
@@ -32,6 +33,7 @@ public class DeleteOperation extends Operation {
 
                 @Override
                 public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                    if (getOperationClosed()) return FileVisitResult.TERMINATE;
                     if (exc == null) {
                         Files.delete(dir);
                         return FileVisitResult.CONTINUE;

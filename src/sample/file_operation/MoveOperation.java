@@ -29,6 +29,7 @@ public class MoveOperation extends Operation {
                     new SimpleFileVisitor<Path>() {
                         @Override
                         public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                            if (getOperationClosed()) return FileVisitResult.TERMINATE;
                             Path target = targetDir.resolve(sourceDir.relativize(dir));
                             try {
                                 Files.copy(dir, target);
@@ -40,6 +41,7 @@ public class MoveOperation extends Operation {
                         }
                         @Override
                         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                            if (getOperationClosed()) return FileVisitResult.TERMINATE;
                             long fileSize = (new File(file.toString())).length();
                             Files.move(file, targetDir.resolve(sourceDir.relativize(file)));
                             incrementProgress(fileSize);
@@ -48,7 +50,7 @@ public class MoveOperation extends Operation {
 
                         @Override
                         public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-                            System.out.println(dir.toString());
+                            if (getOperationClosed()) return FileVisitResult.TERMINATE;
                             Files.delete(dir);
                             return FileVisitResult.CONTINUE;
                         }

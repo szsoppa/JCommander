@@ -26,10 +26,12 @@ public class ProgressDialogController implements Initializable {
     Button cancelButton;
 
     BooleanProperty taskEnded;
+    BooleanProperty taskCancelled;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         taskEnded = new SimpleBooleanProperty(false);
+        taskCancelled = new SimpleBooleanProperty(false);
     }
 
     public void startOperation(Operation operation) {
@@ -44,6 +46,7 @@ public class ProgressDialogController implements Initializable {
                 return Boolean.TRUE;
             }
         };
+        operation.operationClosedProperty().bind(taskCancelled);
         progressBar.progressProperty().bind(operation.progressProperty());
         task.setOnSucceeded(e -> taskEnded.set(true));
 

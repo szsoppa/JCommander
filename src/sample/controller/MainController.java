@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
@@ -17,6 +18,7 @@ import sample.file_operation.MoveOperation;
 import sample.model.FileItem;
 
 import javax.swing.filechooser.FileSystemView;
+import javax.swing.table.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +28,7 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -227,6 +230,8 @@ public class MainController implements Initializable{
         rightColumnName.setCellValueFactory(new PropertyValueFactory<FileItem, String>("rName"));
         rightColumnSize.setCellValueFactory(new PropertyValueFactory<FileItem, String>("rSize"));
         rightColumnTime.setCellValueFactory(new PropertyValueFactory<FileItem, String>("rTime"));
+        setComparator(leftColumnSize);
+        setComparator(rightColumnSize);
     }
 
     private void initializeRoot(ComboBox comboBox, TableView tableView, TextField textField) {
@@ -300,8 +305,29 @@ public class MainController implements Initializable{
             return FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath();
     }
 
-    private static boolean isWindows() {
+    private boolean isWindows() {
         return (osType.contains("win"));
     }
 
+    private void setComparator(TableColumn<FileItem, String> column) {
+        column.setComparator(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                long size1 = 0;
+                long size2 = 0;
+                if (!o1.equals("<DIR>")) {
+                    size1 = Long.parseLong(o1);
+                }
+                if (!o2.equals("<DIR>")) {
+                    size2 = Long.parseLong(o2);
+                }
+
+                if(size1 < size2) {
+                    return -1;
+                } else if (size1 == size2) {
+                    return 0;
+                } else return 1;
+            }
+        });
+    }
 }
