@@ -37,7 +37,7 @@ public class ProgressDialogController implements Initializable {
                 return null;
             }
         };
-        operation.progressProperty().bind(progressBar.progressProperty());
+        progressBar.progressProperty().bind(operation.progressProperty());
         new Thread(task).start();
     }
 }

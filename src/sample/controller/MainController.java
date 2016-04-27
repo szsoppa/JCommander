@@ -31,6 +31,7 @@ import java.util.ResourceBundle;
 
 public class MainController implements Initializable{
 
+    TableView<FileItem> activeTable;
     @FXML
     TableView<FileItem> leftTable;
     @FXML
@@ -137,7 +138,7 @@ public class MainController implements Initializable{
                 e1.printStackTrace();
             }
             if (progressDialog != null) {
-                FileItem fileItem = leftTable.getSelectionModel().getSelectedItem();
+                FileItem fileItem = activeTable.getSelectionModel().getSelectedItem();
                 progressDialog.show();
                 progressDialog.runOperation(new DeleteOperation(fileItem.getrPath()));
             }
@@ -180,6 +181,8 @@ public class MainController implements Initializable{
         rightPathInput.setOnKeyPressed(e -> {
             if(e.getCode().toString().equals("ENTER")) initializeTable(rightTable, rightPathInput.getText());
         });
+        leftTable.setOnMouseClicked(e -> activeTable = leftTable);
+        rightTable.setOnMouseClicked(e -> activeTable = rightTable);
     }
 
     private void changeLanguage(String locale) {
