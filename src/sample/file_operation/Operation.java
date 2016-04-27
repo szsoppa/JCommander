@@ -8,23 +8,27 @@ import java.io.IOException;
  * Created by Szymon on 25.04.2016.
  */
 public abstract class Operation {
-    protected DoubleProperty progress;
+    protected LongProperty progress;
 
     public Operation() {
-        this.progress = new SimpleDoubleProperty(0.0);
+        this.progress = new SimpleLongProperty(0);
     }
 
     public abstract void execute() throws IOException;
 
-    public double getProgress() {
+    public long getProgress() {
         return progress.get();
     }
 
-    public DoubleProperty progressProperty() {
+    public LongProperty progressProperty() {
         return progress;
     }
 
-    public void setProgress(double progress) {
+    public void setProgress(long progress) {
         this.progress.set(progress);
     }
+
+    public void incrementProgress(long progress) { this.progress.set(getProgress() + progress);}
+
+    public abstract String getWorkingFilePath ();
 }

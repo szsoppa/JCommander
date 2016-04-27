@@ -1,5 +1,6 @@
 package sample.file_operation;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -39,7 +40,9 @@ public class MoveOperation extends Operation {
                         }
                         @Override
                         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                            long fileSize = (new File(file.toString())).length();
                             Files.move(file, targetDir.resolve(sourceDir.relativize(file)));
+                            incrementProgress(fileSize);
                             return FileVisitResult.CONTINUE;
                         }
 
@@ -53,6 +56,11 @@ public class MoveOperation extends Operation {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String getWorkingFilePath() {
+        return this.pathFrom;
     }
 
     public String getPathFrom() {

@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import sample.file_operation.CopyOperation;
 import sample.file_operation.Operation;
+import sample.file_operation.OperationUtil;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -31,7 +32,9 @@ public class ProgressDialogController implements Initializable {
             @Override
             protected Void call() throws Exception {
                 operation.progressProperty().addListener((observable, oldValue, newValue) -> {
-                    updateProgress(operation.getProgress(), 1.0);
+                    long size = OperationUtil.getFileSize(operation.getWorkingFilePath());
+                    System.out.println(size);
+                    updateProgress(operation.getProgress(), size);
                 });
                 operation.execute();
                 return null;

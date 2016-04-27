@@ -42,13 +42,18 @@ public class CopyOperation extends Operation {
                         @Override
                         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                             Files.copy(file, targetDir.resolve(sourceDir.relativize(file)));
-                            setProgress(1.0);
+                            incrementProgress((new File(file.toString())).length());
                             return FileVisitResult.CONTINUE;
                         }
                     });
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String getWorkingFilePath() {
+        return this.pathFrom;
     }
 
     public String getPathFrom() {

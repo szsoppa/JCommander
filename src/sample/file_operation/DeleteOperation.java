@@ -1,5 +1,6 @@
 package sample.file_operation;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -23,7 +24,9 @@ public class DeleteOperation extends Operation {
             Files.walkFileTree(dirToDel, new SimpleFileVisitor<Path>() {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    long fileSize = (new File(file.toString())).length();
                     Files.delete(file);
+                    incrementProgress(fileSize);
                     return FileVisitResult.CONTINUE;
                 }
 
@@ -40,6 +43,11 @@ public class DeleteOperation extends Operation {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String getWorkingFilePath() {
+        return this.path;
     }
 
     public String getPath() {
