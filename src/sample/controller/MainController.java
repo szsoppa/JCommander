@@ -18,7 +18,6 @@ import sample.model.FileItem;
 
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
-import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -140,6 +139,10 @@ public class MainController implements Initializable{
             if (progressDialog != null) {
                 FileItem fileItem = activeTable.getSelectionModel().getSelectedItem();
                 progressDialog.show();
+                progressDialog.dialogActiveProperty().addListener(e2 -> {
+                    initializeTable(leftTable, leftPathInput.getText());
+                    initializeTable(rightTable, rightPathInput.getText());
+                });
                 progressDialog.runOperation(new DeleteOperation(fileItem.getrPath()));
             }
         });
@@ -154,6 +157,10 @@ public class MainController implements Initializable{
                 FileItem fileItem = leftTable.getSelectionModel().getSelectedItem();
                 Path targetPath = Paths.get(rightPathInput.getText() + "/" + fileItem.getrName());
                 progressDialog.show();
+                progressDialog.dialogActiveProperty().addListener(e2 -> {
+                    initializeTable(leftTable, leftPathInput.getText());
+                    initializeTable(rightTable, rightPathInput.getText());
+                });
                 progressDialog.runOperation(new CopyOperation(fileItem.getrPath(), targetPath.toString()));
             }
         });
@@ -168,6 +175,10 @@ public class MainController implements Initializable{
                 FileItem fileItem = leftTable.getSelectionModel().getSelectedItem();
                 Path targetPath = Paths.get(rightPathInput.getText() + "/" + fileItem.getrName());
                 progressDialog.show();
+                progressDialog.dialogActiveProperty().addListener(e2 -> {
+                    initializeTable(leftTable, leftPathInput.getText());
+                    initializeTable(rightTable, rightPathInput.getText());
+                });
                 progressDialog.runOperation(new MoveOperation(fileItem.getrPath(), targetPath.toString()));
             }
         });

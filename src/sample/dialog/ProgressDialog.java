@@ -1,5 +1,7 @@
 package sample.dialog;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,6 +25,8 @@ public class ProgressDialog {
     private Stage stage;
     ProgressDialogController progressDialogController;
 
+    BooleanProperty dialogActive;
+
     public ProgressDialog() throws IOException {
         ResourceBundle bundle = ResourceBundle.getBundle("strings", Locale.getDefault());
 
@@ -37,6 +41,7 @@ public class ProgressDialog {
 
         progressDialogController = loader.getController();
         stage.setScene(new Scene(root));
+        dialogActive = new SimpleBooleanProperty(true);
     }
 
     public void show() {
@@ -48,6 +53,24 @@ public class ProgressDialog {
     }
 
     public void runOperation(Operation operation) {
+        progressDialogController.taskEndedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                this.close();
+                dialogActive.set(false);
+            }
+        });
         progressDialogController.startOperation(operation);
+    }
+
+    public boolean getDialogActive() {
+        return dialogActive.get();
+    }
+
+    public BooleanProperty dialogActiveProperty() {
+        return dialogActive;
+    }
+
+    public void setDialogActive(boolean dialogActive) {
+        this.dialogActive.set(dialogActive);
     }
 }
